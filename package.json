@@ -8,8 +8,8 @@
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write .",
-    "dev": "npm run build && firebase emulators:start --only hosting",
-    "deploy": "firebase deploy --only hosting",
+    "dev": "npm run build && concurrently -n build,hosting -c blue,green \"chokidar 'src/**/*.ts' 'digests/**/*.md' 'public/**' -c 'npm run build'\" \"firebase emulators:start --only hosting\"",
+    "deploy": "npm run build && firebase deploy --only hosting",
     "watch:deploy": "chokidar \"digests/**/*.md\" -c \"npm run deploy\" -d 3000"
   },
   "keywords": [],
@@ -23,6 +23,7 @@
     "@biomejs/biome": "2.5.9",
     "@types/node": "^26.2.0",
     "chokidar-cli": "^3.0.0",
+    "concurrently": "^10.0.5",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   },

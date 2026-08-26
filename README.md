@@ -28,9 +28,8 @@ digests/*.md  →  npm run build  →  dist/*.html  →  firebase deploy
   `dist/404.html`. Static assets in `public/` (just `style.css`) are copied
   in as-is. The raw Markdown itself is never copied into `dist/` — only the
   rendered HTML is published.
-- **`npm run deploy`** — runs `firebase deploy --only hosting`, which
-  rebuilds first via the `predeploy` hook in `firebase.json`, then pushes
-  `dist/` to Firebase Hosting.
+- **`npm run deploy`** — runs `npm run build` then `firebase deploy --only
+  hosting`, pushing the freshly-built `dist/` to Firebase Hosting.
 - **`npm run watch:deploy`** — watches `digests/**/*.md` and runs
   `npm run deploy` whenever a file changes. This is what turns "Cowork task
   finishes" into "site is live" without a CI system in between — see
@@ -62,10 +61,11 @@ your machine.
 npm run dev
 ```
 
-Builds the site and serves it via the Firebase Hosting emulator at
-`http://localhost:5000`, so you're previewing exactly what `cleanUrls`
-routing and the generated HTML will look like in production — not just
-opening the files directly.
+Builds the site, serves it via the Firebase Hosting emulator (so you're
+previewing exactly what `cleanUrls` routing and the generated HTML will look
+like in production, not just opening the files directly), and watches
+`src/`, `digests/`, and `public/` — any change triggers a rebuild
+automatically. Refresh the browser to see it.
 
 ## Deploying
 
@@ -128,6 +128,6 @@ src/
   build.ts     — the static site generator: digests/ → dist/
 prompt.md      — the Cowork task prompt that generates digests/*.md
 public/        — static assets copied into dist/ as-is (style.css)
-firebase.json  — Firebase Hosting config (public dir, cleanUrls, predeploy)
+firebase.json  — Firebase Hosting config (public dir, cleanUrls)
 .firebaserc    — which Firebase project this deploys to
 ```
