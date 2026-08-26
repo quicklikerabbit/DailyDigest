@@ -1,0 +1,33 @@
+{
+  "name": "dailydigest",
+  "version": "1.0.0",
+  "description": "Static site generator for a folder of markdown newsletter digests, deployed to Firebase Hosting.",
+  "scripts": {
+    "build": "tsx src/build.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "dev": "npm run build && firebase emulators:start --only hosting",
+    "deploy": "firebase deploy --only hosting",
+    "watch:deploy": "chokidar \"digests/**/*.md\" -c \"npm run deploy\" -d 3000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "marked": "^18.0.9"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.9",
+    "@types/node": "^26.2.0",
+    "chokidar-cli": "^3.0.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
+  }
+}
