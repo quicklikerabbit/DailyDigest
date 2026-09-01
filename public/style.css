@@ -32,6 +32,15 @@ body {
   line-height: 1.65;
 }
 
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+}
+
 .site-header {
   border-bottom: 1px solid var(--border);
   padding: 1rem 1.5rem;
@@ -150,6 +159,44 @@ body {
 
 .digest-content img {
   max-width: 100%;
+}
+
+.story-index {
+  margin-top: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 1rem;
+}
+
+.story-index summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.9rem 0;
+  list-style: none;
+}
+
+.story-index summary::-webkit-details-marker {
+  display: none;
+}
+
+.story-index summary::before {
+  content: "▶";
+  display: inline-block;
+  margin-right: 0.6rem;
+  font-size: 0.75em;
+  transition: transform 0.15s ease;
+}
+
+.story-index[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.story-index summary:hover {
+  color: var(--accent);
+}
+
+.story-index > *:last-child {
+  padding-bottom: 1rem;
 }
 
 .digest-list {
