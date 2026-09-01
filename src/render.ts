@@ -47,6 +47,14 @@ function formatDate(date: Date | null): string {
   });
 }
 
+let stylesheetHref = "/style.css";
+
+// Called once at the start of a build with the content-hashed filename so
+// every page picks up the current stylesheet, not a browser-cached one.
+export function setStylesheetHref(href: string): void {
+  stylesheetHref = href;
+}
+
 function pageShell(title: string, bodyHtml: string): string {
   return `<!doctype html>
 <html lang="en">
@@ -54,7 +62,7 @@ function pageShell(title: string, bodyHtml: string): string {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${escapeHtml(title)}</title>
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="${escapeHtml(stylesheetHref)}" />
 </head>
 <body>
 ${bodyHtml}

@@ -1,10 +1,20 @@
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import { getDigestByFilename, listDigests, slugFor } from "./digests";
 import {
   renderDigestPage,
   renderIndexPage,
   renderNotFoundPage,
+  setStylesheetHref,
 } from "./render";
 
 const OUTPUT_DIR = path.join(process.cwd(), "dist");
@@ -21,9 +31,25 @@ function copyStaticAssets(): void {
   }
 }
 
+// Renames style.css to a content-hashed filename so a new deploy always
+// serves fresh CSS instead of a stale, browser-cached copy at the same URL.
+function fingerprintStylesheet(): void {
+  const cssPath = path.join(OUTPUT_DIR, "style.css");
+  if (!existsSync(cssPath)) return;
+
+  const hash = createHash("sha256")
+    .update(readFileSync(cssPath))
+    .digest("hex")
+    .slice(0, 10);
+  const hashedName = `style.${hash}.css`;
+  renameSync(cssPath, path.join(OUTPUT_DIR, hashedName));
+  setStylesheetHref(`/${hashedName}`);
+}
+
 function build(): void {
   resetOutputDir();
   copyStaticAssets();
+  fingerprintStylesheet();
 
   const digests = listDigests();
 
