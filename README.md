@@ -85,7 +85,20 @@ npm run watch:deploy
 `npm run watch:deploy` is a long-running foreground process — it needs to be
 kept alive independently of any one terminal session (e.g. a `launchd` agent
 on macOS) so it survives reboots and keeps watching after you close the
-terminal. That setup is machine-specific and isn't part of this repo.
+terminal.
+
+`launchd/` holds that agent as a template, so no machine-specific paths are
+committed. `launchd/install.sh` fills in this repo's path and where `npm`
+and `firebase` live on the current machine, then installs and starts it:
+
+```
+./launchd/install.sh
+```
+
+It starts at login and restarts if it exits. Logs go to
+`~/Library/Logs/DailyDigest/watch-deploy.log`. Re-run `install.sh` after
+switching node versions with nvm. Don't also run `npm run watch:deploy` in
+a terminal, or every new digest deploys twice.
 
 ## Before your first deploy
 
